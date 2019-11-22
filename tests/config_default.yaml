@@ -1,6 +1,6 @@
 #-- I/O --#
 # file listing samples and associated data
-samples_file: tests/samples/samples_n10.txt
+samples_file: tests/samples/samples_n5.txt
 
 ## column names in samples table
 samples_col: 'ncbi_organism_name'
@@ -9,7 +9,7 @@ taxID_col: 'ncbi_species_taxid'
 taxonomy_col: 'ncbi_taxonomy'   
 
 # output location
-output_dir: tests/output_n10/
+output_dir: tests/output_n5/
 
 #-- databases to create --#
 # Replace "Create" with "Skip" to skip creation of any of these
@@ -17,20 +17,16 @@ output_dir: tests/output_n10/
 databases:
   kraken2: Create
   bracken: Create
-  humann2_bowtie2: Create
-  humann2_diamond: Create
-
-# output database name
-db_name: GTDB-custom
+  humann2_bowtie2: Skip
+  humann2_diamond: Skip
 
 #-- keep intermediate files required for re-creating DBs (eg., w/ more genomes) --#
 # If "True", the intermediate files are saved to `output_dir`
 # Else, the intermediate files are temporarily stored in `temp_folder`
 keep_intermediate: True
-use_ancient: True
 
 #-- if custom NCBI taxdump files (or just Skip) --#
-names_dmp: Skip 
+names_dmp: Skip
 nodes_dmp: Skip 
 
 #-- software parameters --#
@@ -42,7 +38,7 @@ params:
     - 100
     - 150
   prodigal: ""
-  diamond_db: /ebio/abt3_projects/databases_no-backup/humann2/uniref50/uniref50_annotated.1.1.dmnd
+  diamond_db: uniref50.ec_filtered.1.1.dmnd
   diamond_db_to_mem: True
   diamond: --evalue 1e-3 --sensitive --max-target-seqs 20 --block-size 3 --index-chunks 2
   vsearch_per_genome: --id 0.97 --strand both --qmask none --fasta_width 0
@@ -58,4 +54,4 @@ humann2_prot_seqs: Skip
 pipeline:
   snakemake_folder: ./
   script_folder: ./bin/scripts/
-  temp_folder: /tmp/global2/     # your username will be added automatically to this path
+  temp_folder: tmp

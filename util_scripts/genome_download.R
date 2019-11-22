@@ -43,12 +43,14 @@ if(hits[1] == ''){
 x = unlist(args['acc_table'])[1]
 write(sprintf('Reading table: %s', x), stderr())
 df = read.delim(x, sep='\t')
+write(sprintf('Number of rows: %s', nrow(df)), stderr())
 
-# fitlering table
+
+# filtering table
 ## checking for "fasta_file_path" column
 filter_bool = unlist(args['filter'])[1]
 if(filter_bool == TRUE){
-    write('Filtering to just NAs in fasta_file_path column', stderr())
+    write('Filtering to just rows with NAs in `fasta_file_path` column', stderr())
     if('fasta_file_path' %in% colnames(df)){
 	df_complete = filter(df, !(is.na(fasta_file_path) | fasta_file_path == ''))
         df = filter(df, is.na(fasta_file_path) | fasta_file_path == '')
@@ -58,8 +60,11 @@ if(filter_bool == TRUE){
 }
 
 ## Filtering based on user params & getting accessions
+write('Filtering out genomes lacking NCBI genbank assembly accession')
 col = unlist(args['column'])[1]
 df = df[df[,col] != 'none',]
+write(sprintf('Number of rows after filtering: %s', nrow(df)), stderr())
+### just accessions
 df_acc = df[,col]
 df_acc = as.data.frame(df_acc)
 
